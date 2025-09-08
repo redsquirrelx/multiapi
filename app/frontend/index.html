@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MultiAPI</title>
+</head>
+<body>
+    <h1>MultiAPI</h1>
+
+    <p>Retrieving data from...</p>
+
+    <h2>Api 1</h2>
+    <div id="content-api1">
+        <table id="table-api1" style="display: none;">
+            <thead>
+                <td>id</td>
+                <td>username</td>
+                <td>email</td>
+            </thead>
+            <tbody id="table-body-api1">
+
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Api 2</h2>
+    <div id="content-api2">
+    </div>
+    
+    <h2>Api 3</h2>
+    <div id="content-api3">
+        <table id="table-api3" style="display: none;">
+            <thead>
+                <td>id</td>
+                <td>name</td>
+                <td>description</td>
+                <td>price</td>
+                <td>stock</td>
+            </thead>
+            <tbody id="table-body-api3">
+
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const getTd = (content) => {
+            const td = document.createElement("td")
+            td.textContent = content
+            return td
+        }
+
+        const getHeaderBlock = (header) => {
+            const block = document.createElement("div")
+
+            const version = document.createElement("div")
+            version.textContent = "Version: " + header.version
+
+            const info = document.createElement("div")
+            info.textContent = "Info: " + header.info
+
+            block.appendChild(version)
+            block.appendChild(info)
+            return block
+        }
+
+        const loadApi1 = async () => {
+            const contentApi = document.querySelector("#content-api1")
+            const tableApi = document.querySelector("#table-api1")
+            const tableBodyApi = document.querySelector("#table-body-api1")
+
+            try {
+                const res = await fetch("http://multiapi.local/api1")
+                const { header, data = [] } = await res.json()
+                
+                contentApi1.insertBefore(getHeaderBlock(header), tableApi1)
+
+                if (data.length != 0) {
+                    data.forEach(el => {
+                        const row = document.createElement("tr")
+                        row.appendChild(getTd(el.id))
+                        row.appendChild(getTd(el.username))
+                        row.appendChild(getTd(el.email))
+                        tableBodyApi.appendChild(row)
+                    })
+                    tableApi.style["display"] = "table"
+                }
+                else {
+                    const msg = document.createElement("div")
+                    msg.textContent = "No data found"
+                    contentApi.insertBefore(msg, tableApi)
+                }
+                
+            }
+            catch(e) {
+                contentApi.textContent = "Service not available"
+            }
+        }
+
+        const loadApi2 = async () => {
+            const contentApi2 = document.querySelector("#content-api2")
+
+            try {
+                const res = await fetch("http://multiapi.local/api2")
+                const data = await res.json()
+                contentApi2.appendChild(getHeaderBlock(data))
+            }
+            catch(e) {
+                contentApi2.textContent = "Service not available"
+            }
+        }
+
+        const loadApi3 = async () => {
+            const contentApi = document.querySelector("#content-api3")
+            const tableApi = document.querySelector("#table-api3")
+            const tableBodyApi = document.querySelector("#table-body-api3")
+
+            try {
+                const res = await fetch("http://multiapi.local/api3")
+                const { header, data = [] } = await res.json()
+
+                contentApi.insertBefore(getHeaderBlock(header), tableApi)
+
+                if (data.length != 0) {
+                    data.forEach(el => {
+                        const row = document.createElement("tr")
+                        row.appendChild(getTd(el.id))
+                        row.appendChild(getTd(el.name))
+                        row.appendChild(getTd(el.description))
+                        row.appendChild(getTd(el.price))
+                        row.appendChild(getTd(el.stock))
+                        tableBodyApi.appendChild(row)
+                    })
+                    tableApi.style["display"] = "table"
+                }
+                else {
+                    const msg = document.createElement("div")
+                    msg.textContent = "No data found"
+                    contentApi.insertBefore(msg, tableApi)
+                }
+
+            }
+            catch(e) {
+                console.log(e)
+                contentApi.textContent = "Service not available"
+            }
+        }
+
+        loadApi1()
+        loadApi2()
+        loadApi3()
+
+    </script>
+
+</body>
+</html>

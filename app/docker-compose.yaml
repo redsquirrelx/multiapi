@@ -1,0 +1,70 @@
+version: "3.8"
+name: multiapi
+
+services:
+  frontend:
+    image: frontend-img
+    build: ./frontend
+    ports:
+      - "81:80"
+    networks:
+      - multiapi_network
+  
+  api1:
+    image: api1-img
+    build: ./api1
+    ports:
+      - "8081:8080"
+    networks:
+      - multiapi_network
+  
+  api2:
+    image: api2-img
+    build: ./api2
+    ports:
+      - "8082:8080"
+    networks:
+      - multiapi_network
+  
+  api3:
+    image: api3-img
+    build: ./api3
+    ports:
+      - "8083:8080"
+    networks:
+      - multiapi_network
+    
+  db1:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_PORT: 5432
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg_data1:/var/lib/postgresql/data
+    networks:
+      - multiapi_network
+  
+  db3:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_PORT: 5432
+    ports:
+      - "5434:5432"
+    volumes:
+      - pg_data3:/var/lib/postgresql/data
+    networks:
+      - multiapi_network
+
+volumes:
+  pg_data1:
+  pg_data3:
+
+networks:
+  multiapi_network: {}
