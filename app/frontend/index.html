@@ -74,7 +74,7 @@
                 const res = await fetch("http://multiapi.local/api1")
                 const { header, data = [] } = await res.json()
                 
-                contentApi1.insertBefore(getHeaderBlock(header), tableApi1)
+                contentApi.insertBefore(getHeaderBlock(header), tableApi)
 
                 if (data.length != 0) {
                     data.forEach(el => {
@@ -94,6 +94,7 @@
                 
             }
             catch(e) {
+                console.log(e)
                 contentApi.textContent = "Service not available"
             }
         }
