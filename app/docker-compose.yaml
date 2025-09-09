@@ -11,7 +11,8 @@ services:
       - multiapi_network
     depends_on:
       - api1
-      - api2
+      - api2-a
+      - api2-b
       - api3
   
   api1:
@@ -24,7 +25,7 @@ services:
     depends_on:
       - db1
   
-  api2:
+  api2-a:
     image: api2-img
     build: ./api2
     ports:
@@ -32,11 +33,19 @@ services:
     networks:
       - multiapi_network
   
+  api2-b:
+    image: api2-img
+    build: ./api2
+    ports:
+      - "8083:8080"
+    networks:
+      - multiapi_network
+  
   api3:
     image: api3-img
     build: ./api3
     ports:
-      - "8083:8080"
+      - "8084:8080"
     networks:
       - multiapi_network
     depends_on:
